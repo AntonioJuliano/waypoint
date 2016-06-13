@@ -1,15 +1,29 @@
 class WalletController < ApplicationController
   def create
-    render json: Wallet.create(create_wallet_params)
+    w = Wallet.create(
+      create_wallet_params
+    )
+
+    render json: w
   end
 
   def get
     render json: Wallet.find_by(name: params['name'])
   end
 
+  def restore
+
+  end
+
   private
 
   def create_wallet_params
-    params.require(:wallet).permit(:name)
+    params.permit(
+      :name,
+      accounts_attributes: [
+        :currency,
+        { addresses_attributes: [:currency, :address, :encrypted_private_key]}
+      ]
+    )
   end
 end

@@ -1,17 +1,21 @@
 class Account < ActiveRecord::Base
-  VALID_CURRENCIES = ['BTC']
+  VALID_CURRENCIES = ['btc']
 
-  belongs_to :wallet
+  belongs_to :wallet, inverse_of: :accounts
 
   has_many :debits
   has_many :credits
 
+  has_many :addresses, inverse_of: :account
+  accepts_nested_attributes_for :addresses
+
   validates_presence_of :currency, :wallet
   validates_inclusion_of :currency,
     in: VALID_CURRENCIES,
-    message: "Invalid Currency"
+    message: "Invalid"
   validates :balance, presence: true, numericality: { only_integer: true,
                                                       greater_than_or_equal_to: 0 }
+  validates :addresses, :length => { :minimum => 1 }
   validate :correct_balance
 
   private
