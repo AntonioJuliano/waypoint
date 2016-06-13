@@ -1,6 +1,6 @@
 # Waypoint
 
-Open source cryptocurrency wallet backend.
+Cryptocurrency wallet backend.
 
 ## Setup
 
