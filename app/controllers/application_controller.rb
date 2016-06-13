@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  # protect_from_forgery with: :null_session ??? do we need this?
+  # protect_from_forgery with: :null_session ?? do we need this?
 
   rescue_from ActiveRecord::RecordNotFound, :with => :record_not_found
 

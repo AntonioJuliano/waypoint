@@ -3,7 +3,7 @@ class Transaction < ActiveRecord::Base
   has_many :credits
   # TODO has_one :script ?
 
-  before_validation :set_default_fee, unless: -> (t) { fee.present? }
+  before_validation :set_default_fee, unless: -> (t) { t.fee.present? }
 
   validates :fee, presence: true, numericality: { only_integer: true,
                                                   greater_than_or_equal_to: 0 }
