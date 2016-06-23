@@ -1,5 +1,5 @@
 class Account < ActiveRecord::Base
-  VALID_CURRENCIES = ['btc']
+  VALID_CURRENCIES = ['BTC']
 
   belongs_to :wallet, inverse_of: :accounts
 

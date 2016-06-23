@@ -1,3 +1,4 @@
 class WalletSerializer < BaseSerializer
-  attributes :id, :name, :accounts
+  attributes :name
+  has_many :accounts
 end
