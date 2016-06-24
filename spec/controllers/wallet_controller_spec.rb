@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe WalletController do
   let(:name) { 'my_wallet' }
-  let(:currency) { 'btc' }
+  let(:currency) { 'BTC' }
   let(:address) { 'test addr' }
   let(:pk) { 'key1' }
 
@@ -11,12 +11,10 @@ RSpec.describe WalletController do
       expect{
         post :create,
           name: name,
-          accounts_attributes: [{
+          keys: [{
             currency: currency,
-            addresses_attributes: [{
-              address: address,
-              encrypted_private_key: pk
-            }]
+            address: address,
+            encrypted_private_key: pk
           }]
       }.to change(Wallet,:count).by(1)
 
@@ -37,6 +35,34 @@ RSpec.describe WalletController do
       expect(addr.currency).to eq(currency)
       expect(addr.address).to eq(address)
       expect(addr.encrypted_private_key).to eq(pk)
+    end
+  end
+
+  describe ".get" do
+    it "gets wallet matching name" do
+      w = create(:wallet)
+      expect(Wallet.last).to eq(w)
+
+      post :get, name: w.name
+
+      expect(response.status).to eq(200)
+
+      r = JSON.parse(response.body)['wallet']
+
+      expect(r['name']).to eq(w.name)
+
+      r['accounts'].each do |a|
+        matching_account = w.accounts.where(currency: a['currency']).first
+        expect(matching_account).to be_present
+        expect(a['balance']).to eq(matching_account.balance)
+
+        a['addresses'].each do |addr|
+          matching_address = matching_account.addresses.where(address: addr['address']).first
+
+          expect(matching_address).to be_present
+          expect(addr['encrypted_private_key']).to eq(matching_address.encrypted_private_key)
+        end
+      end
     end
   end
 end

@@ -18,12 +18,22 @@ class WalletController < ApplicationController
   private
 
   def create_wallet_params
-    params.permit(
-      :name,
-      accounts_attributes: [
-        :currency,
-        { addresses_attributes: [:currency, :address, :encrypted_private_key]}
-      ]
-    )
+    create_params = { name: params[:name] }
+
+    keys_arr = []
+
+    params[:keys].each do |k|
+      keys_arr << {
+        currency: k[:currency],
+        addresses_attributes: [{
+          address: k[:address],
+          encrypted_private_key: k[:encrypted_private_key]
+        }]
+      }
+    end
+
+    create_params[:accounts_attributes] = keys_arr
+
+    create_params
   end
 end

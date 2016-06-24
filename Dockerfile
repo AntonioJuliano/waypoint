@@ -5,7 +5,6 @@ ENV APP_HOME /waypoint
 RUN mkdir $APP_HOME
 WORKDIR $APP_HOME
 
-ADD Gemfile* $APP_HOME/
-RUN bundle install
+ENV BUNDLE_PATH /box
 
 ADD . $APP_HOME

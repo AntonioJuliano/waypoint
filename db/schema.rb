@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(version: 20160610230007) do
   end
 
   add_index "addresses", ["account_id"], name: "index_addresses_on_account_id", using: :btree
+  add_index "addresses", ["address"], name: "index_addresses_on_address", using: :btree
   add_index "addresses", ["currency"], name: "index_addresses_on_currency", using: :btree
 
   create_table "payments", force: :cascade do |t|
