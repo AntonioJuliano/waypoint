@@ -11,10 +11,6 @@ class WalletController < ApplicationController
     render json: Wallet.find_by(name: params['name'])
   end
 
-  def restore
-
-  end
-
   private
 
   def create_wallet_params
