@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :address do
     currency 'BTC'
-    address 'pub_key'
+    sequence(:address) { |n| "PubKey-#{n}" }
     encrypted_private_key 'crypted'
 
     after(:build) do |a|

@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   # ------ transaction  ------
   post 'transaction.create',       to: 'transaction#create'
   post 'transaction.broadcast',    to: 'transaction#broadcast'
-  post 'transaction.get',          to: 'transaction#get'
+  post 'transaction.list',         to: 'transaction#list'
 
   # ------ wallet ------
   post 'wallet.create',            to: 'wallet#create'

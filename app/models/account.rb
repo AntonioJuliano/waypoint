@@ -24,11 +24,11 @@ class Account < ActiveRecord::Base
     total = 0
 
     credits.each do |c|
-      total += c.amount
+      total += c.amount if c.paid_out?
     end
 
     debits.each do |d|
-      total -= d.amount
+      total -= d.amount if d.paid_out?
     end
 
     unless total == balance

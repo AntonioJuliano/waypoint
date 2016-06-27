@@ -1,7 +1,8 @@
 class CreateTransactions < ActiveRecord::Migration
   def change
     create_table :transactions do |t|
-      t.integer :fee, limit: 8, null: false
+      t.string :state, null: false, index: true
+      t.belongs_to :wallet, index: true
 
       t.timestamps null: false
     end
