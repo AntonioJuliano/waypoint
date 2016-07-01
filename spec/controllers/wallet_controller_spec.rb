@@ -20,6 +20,7 @@ RSpec.describe WalletController do
 
       expect(response.status).to eq(200)
 
+
       w = Wallet.last
       a = Account.last
       addr = Address.last
