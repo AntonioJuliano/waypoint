@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :wallet do
-    name 'factory_wallet'
+    sequence(:name) { |n| "Wallet-#{n}" }
 
     after(:build) do |w|
       if w.accounts.empty?

@@ -3,6 +3,7 @@ class CreatePayments < ActiveRecord::Migration
     create_table :payments do |t|
       t.string :type, null: false
       t.string :currency, null: false
+      t.string :state, null: false, index: true
       t.integer :amount, limit: 8, null: false
       t.boolean :external, null: false, default: false
       t.belongs_to :transaction, index: true, null: false

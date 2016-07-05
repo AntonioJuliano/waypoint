@@ -1,14 +1,31 @@
 class Transaction < ActiveRecord::Base
-  has_many :debits
-  has_many :credits
+  state_machine initial: :created do
+    before_transition on: :signed, do: :start_payments
+
+    event :signed do
+      transition :created => :signed
+    end
+
+    event :broadcast do
+      transition :signed => :broadcast
+    end
+  end
+
+  belongs_to :wallet
+  has_many :payments, inverse_of: :tx, foreign_key: 'transaction_id'
   # TODO has_one :script ?
 
-  before_validation :set_default_fee, unless: -> (t) { fee.present? }
-
-  validates :fee, presence: true, numericality: { only_integer: true,
-                                                  greater_than_or_equal_to: 0 }
+  validates :payments, :length => { :minimum => 2 }
   validate :zero_sum
   validate :same_payment_currency
+
+  def debits
+    payments.to_a.keep_if { |p| p.is_a?(Debit) }
+  end
+
+  def credits
+    payments.to_a.keep_if { |p| p.is_a?(Credit) }
+  end
 
   private
 
@@ -25,7 +42,7 @@ class Transaction < ActiveRecord::Base
   end
 
   def payments_sum
-    total = fee
+    total = 0
 
     credits.each do |c|
       total += c.amount
@@ -42,13 +59,5 @@ class Transaction < ActiveRecord::Base
     if payments_sum != 0
       errors.add(:base, 'Payments must sum to zero')
     end
-  end
-
-  def set_default_fee
-    self.fee ||= 0 # TODO
-  end
-
-  def payments
-    debits << credits
   end
 end

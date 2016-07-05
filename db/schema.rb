@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(version: 20160610230007) do
   create_table "payments", force: :cascade do |t|
     t.string   "type",                                     null: false
     t.string   "currency",                                 null: false
+    t.string   "state",                                    null: false
     t.integer  "amount",         limit: 8,                 null: false
     t.boolean  "external",                 default: false, null: false
     t.integer  "transaction_id",                           null: false
@@ -52,13 +53,18 @@ ActiveRecord::Schema.define(version: 20160610230007) do
   end
 
   add_index "payments", ["account_id"], name: "index_payments_on_account_id", using: :btree
+  add_index "payments", ["state"], name: "index_payments_on_state", using: :btree
   add_index "payments", ["transaction_id"], name: "index_payments_on_transaction_id", using: :btree
 
   create_table "transactions", force: :cascade do |t|
-    t.integer  "fee",        limit: 8, null: false
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.string   "state",      null: false
+    t.integer  "wallet_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
+
+  add_index "transactions", ["state"], name: "index_transactions_on_state", using: :btree
+  add_index "transactions", ["wallet_id"], name: "index_transactions_on_wallet_id", using: :btree
 
   create_table "wallets", force: :cascade do |t|
     t.string   "name",       null: false
